@@ -1,0 +1,9 @@
+# termux-control package draft
+
+This recipe packages the native client for the opt-in local control socket in the Termux Next Generation app fork. The listener is disabled by default and the client does not enable it. It is not compatible with an app that lacks that experimental protocol. All processes running under the app UID share the locally selected scopes; output access and force-close access require separate opt-ins.
+
+The source URL and checksum pin a draft fork commit so the recipe is reviewable. **Do not publish this package as an upstream release:** first merge or publish an accepted stable source, update the URL, checksum and version, review the protocol and permissions, and run the normal Termux package builder and Android device matrix. A new package must not be added to the bootstrap without an explicit compatibility and upgrade plan.
+
+The recipe's build and install hooks were exercised against the pinned archive in a private staging directory on an Android ARM64 Termux host. A manually assembled ARM64 `.deb` was inspected, and its staged binary passed mock Unix socket tests. The hooks were also cross-compiled for ARM, i686 and x86_64 using Termux Clang and an NDK sysroot; those binaries were not executed. This is not a standard `build-package.sh` build, a published package, or a device test of Android LocalSocket or a live PTY. The normal on-device package builder installs intermediate files into the live Termux prefix; this sandbox did not permit that, so it was not run.
+
+When an appropriate isolated Termux build environment is available, build with the repository's supported `./build-package.sh termux-control` and verify the resulting package, installation, removal, upgrades, each ABI, peer credentials, listener consent, and behavior against matching app versions before release. Do not overwrite an existing official Termux installation to test a differently signed app.
